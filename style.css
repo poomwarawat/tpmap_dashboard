@@ -239,7 +239,9 @@ select:disabled::-ms-expand {
 }
 .map-controller-right {
   width: 40px;
-  height: 400px;
+  height: 300px;
+  overflow-y: scroll;
+  overflow-x: hidden;
   z-index: 4;
   position: absolute;
   right: 28px;

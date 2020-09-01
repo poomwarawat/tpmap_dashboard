@@ -252,7 +252,11 @@ async function handleSelectProvince(e) {
     await Map.createMap();
     await Map.createProblem();
     await Map.loadGraph();
-    await Map.createProvinceSelecter();
+    await Map.removeSelecter("select_amphur");
+    await Map.removeSelecter("select_tambol");
+    await createNoneSelect("select_amphur");
+    await createNoneSelect("select_tambol");
+    // await Map.createProvinceSelecter();
     await Map.createMaker();
     await Map.createLayerControl();
     return false;
@@ -268,11 +272,31 @@ async function handleSelectProvince(e) {
     await Amphur.loadBaseMap();
     await Amphur.createMap();
     await Amphur.createProblem();
+    await Amphur.removeSelecter("select_tambol");
+    await createNoneSelect("select_tambol");
     await Amphur.loadGraph();
     await Amphur.createProvinceSelecter();
     await Amphur.createMaker();
     // await Amphur.createLayerControl();
   }
+}
+function createNoneSelect(id) {
+  return new Promise((resolve) => {
+    const select = document.getElementById(id);
+    const option = document.createElement("option");
+    let text;
+    if (id === "select_province") {
+      text = "กรุณาเลือกจังหวัด";
+    } else if (id === "select_amphur") {
+      text = "กรุณาเลือกอำเภอ";
+    } else if (id === "select_tambol") {
+      text = "กรุณาเลือกตำบล";
+    }
+    option.value = 0;
+    option.innerHTML = text;
+    select.appendChild(option);
+    resolve(true);
+  });
 }
 async function handleSelectAmphur(e) {
   const loader = document.getElementById("loader");
@@ -287,6 +311,8 @@ async function handleSelectAmphur(e) {
     await Amphur.main();
     await Amphur.loadBaseMap();
     await Amphur.createMap();
+    await Amphur.removeSelecter("select_tambol");
+    await createNoneSelect("select_tambol");
     await Amphur.createProblem();
     await Amphur.loadGraph();
     await Amphur.createProvinceSelecter();

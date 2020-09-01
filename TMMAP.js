@@ -96,7 +96,7 @@ class TPMAP {
       if (this.mapFiler !== "คน|นักเรียน|สูงอายุ") {
         const map_controller = document.getElementById("map_controller");
         map_controller.style.display = "block";
-        console.log(eMenState);
+        // console.log(eMenState);
         if (eMenState === "eMENSCR_Y3") {
           this.Y3.addTo(this.mymap);
         } else if (eMenState === "eMENSCR_Y4") {
@@ -108,14 +108,17 @@ class TPMAP {
       ) {
         const map_controller = document.getElementById("map_controller");
         map_controller.style.display = "block";
-        console.log(eMenState);
+        // console.log(eMenState);
         if (eMenState === "eMENSCR_Y3") {
           this.Y3.addTo(this.mymap);
         } else if (eMenState === "eMENSCR_Y4") {
           this.Y4.addTo(this.mymap);
         }
       }
-      L.control.layers(this.baseMaps, overlayMaps).addTo(this.mymap);
+      const layerG = L.control.layers(this.baseMaps, overlayMaps);
+      let test = layerG.options;
+      test.collapsed = false;
+      layerG.addTo(this.mymap);
     }
   }
   // createNewMarker() {}
@@ -644,10 +647,6 @@ class TPMAP {
           eMenState = e.name;
           map_controller.style.display = "none";
         }
-        // if (e.name === "eMENSCR_Y3" || e.name === "eMENSCR_Y4") {
-        //   const map_controller = document.getElementById("map_controller");
-        //   map_controller.style.display = "none";
-        // }
       });
       var Icon = L.icon({
         iconUrl: "/static/images/01emenscr3.png", // y3

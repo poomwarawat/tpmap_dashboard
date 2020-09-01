@@ -262,7 +262,9 @@ class TPMAP {
           }
         });
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
 
     function sortSelect(e) {
       var oA, i, o;
@@ -430,6 +432,7 @@ class TPMAP {
   }
   createMap() {
     try {
+      document.getElementById("map_error").style.display = "none";
       const coordinates = this.coordinates;
       const loader = document.getElementById("loader");
       loader.style.display = "none";
@@ -496,7 +499,8 @@ class TPMAP {
         });
       }
     } catch (error) {
-      this.createErrorMessage("เกิดข้อผิดพลาด : ไม่พบข้อมูลที่ท่านต้องการ");
+      // this.createErrorMessage("เกิดข้อผิดพลาด : ไม่พบข้อมูลที่ท่านต้องการ");
+      document.getElementById("map_error").style.display = "block";
     }
   }
   createErrorMessage(message) {
@@ -622,13 +626,28 @@ class TPMAP {
           const map_controller = document.getElementById("map_controller");
           eMenState = e.name;
           map_controller.style.display = "block";
+          if (e.name === "eMENSCR_Y3") {
+            filterState1 = true;
+          } else if (e.name === "eMENSCR_Y4") {
+            filterState2 = true;
+          }
         }
       });
       this.mymap.on("overlayremove", function (e) {
-        if (e.name === "eMENSCR_Y3" || e.name === "eMENSCR_Y4") {
+        if (e.name === "eMENSCR_Y3") {
+          filterState1 = false;
+        } else if (e.name === "eMENSCR_Y4") {
+          filterState2 = false;
+        }
+        if (filterState1 === false && filterState2 === false) {
           const map_controller = document.getElementById("map_controller");
+          eMenState = e.name;
           map_controller.style.display = "none";
         }
+        // if (e.name === "eMENSCR_Y3" || e.name === "eMENSCR_Y4") {
+        //   const map_controller = document.getElementById("map_controller");
+        //   map_controller.style.display = "none";
+        // }
       });
       var Icon = L.icon({
         iconUrl: "/static/images/01emenscr3.png", // y3
@@ -744,7 +763,6 @@ class TPMAP {
     });
     if (this.state === "province") {
       let MarkerArray = [];
-      console.log("start");
       this.marker.map(async (data, index) => {
         const Location = new MapData("amphur", data["_id"]);
         var location = await Location.getCentroid();
@@ -775,12 +793,9 @@ class TPMAP {
       });
     } else if (this.state === "amphur") {
       let MarkerArray = [];
-      console.log("Hello");
-      var myRenderer = L.canvas({ padding: 0.5 });
       this.marker.map(async (data, index) => {
         const location = data["geometry"]["coordinates"];
         var marker = L.marker([location[1], location[0]], {
-          renderer: myRenderer,
           icon: Icon3,
         }).addTo(this.mymap);
         marker.on("mouseover", (e) => {

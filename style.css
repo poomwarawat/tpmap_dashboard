@@ -230,7 +230,7 @@ select:disabled::-ms-expand {
   width: 100%;
 }
 .map-controller {
-  width: 280px;
+  width: 200px;
   height: 40px;
   z-index: 4;
   position: absolute;
@@ -247,6 +247,25 @@ select:disabled::-ms-expand {
 }
 #filter_text {
   border: none;
+  background-color: #455396;
+  width: 100px;
+  height: 40px;
+  color: white;
+}
+::placeholder {
+  color: white;
+  opacity: 1; /* Firefox */
+}
+/* ::-webkit-input-placeholder {
+  color: white;
+} */
+.input-line {
+  width: 100px;
+  height: 2px;
+  background-color: white;
+  position: absolute;
+  bottom: 5px;
+  left: 0;
 }
 .box-filter {
   width: 40px;
@@ -267,6 +286,21 @@ select:disabled::-ms-expand {
   width: 50px;
   border: none;
   color: white;
+}
+.map-error-msg {
+  display: none;
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 250px;
+  height: 35px;
+  text-align: center;
+  font-size: 14px;
+  padding: 5px;
+  color: white;
+  background-color: rgb(236, 55, 55);
+  z-index: 3;
 }
 #map_control_reset {
   background-color: rgb(221, 60, 60);

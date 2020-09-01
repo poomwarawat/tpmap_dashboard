@@ -3,6 +3,8 @@ let orderState = -1;
 let countryState = "province";
 let valueState = null;
 var eMenState = null;
+var filterState1 = false;
+var filterState2 = false;
 
 async function Pageload() {
   const select_province = document.getElementById("select_province");

@@ -174,8 +174,7 @@
                   <input
                     type="text"
                     id="filter_text"
-                    class="form-control"
-                    placeholder="เพิ่มคำที่ต้องการค้นหา"
+                    placeholder="ค้นหา"
                     aria-label="Recipient's username"
                     aria-describedby="button-addon2"
                   />
@@ -186,8 +185,12 @@
                     <button type="button" id="map_control_reset">ล้าง</button>
                   </div>
                 </div>
+                <div class="input-line"></div>
               </div>
               <div class="map-controller-right" id="box_filter"></div>
+              <div class="map-error-msg" id="map_error">
+                ระบบไม่มีข้อมูลขอบเขตพื้นที่ที่ท่านเลือก
+              </div>
               <div id="mapid"></div>
             </div>
           </div>

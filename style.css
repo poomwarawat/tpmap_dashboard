@@ -7,7 +7,7 @@
   background-color: rgba(240, 240, 240, 0.5);
 }
 .header {
-  z-index: 3;
+  z-index: 5;
   position: -webkit-sticky;
   position: sticky;
   top: 0;
@@ -156,7 +156,7 @@ select:disabled::-ms-expand {
 /* loader */
 .loader-bg {
   position: fixed;
-  z-index: 4;
+  z-index: 6;
   height: 100%;
   width: 100%;
   background-color: #33333365;
@@ -225,6 +225,108 @@ select:disabled::-ms-expand {
   height: 80%;
   overflow-y: auto;
 }
+.tree-d {
+  height: 100vh;
+  width: 100%;
+}
+.map-controller {
+  width: 280px;
+  height: 40px;
+  z-index: 4;
+  position: absolute;
+  right: 25px;
+  top: 10px;
+}
+.map-controller-right {
+  width: 40px;
+  height: 400px;
+  z-index: 4;
+  position: absolute;
+  right: 28px;
+  top: 105px;
+}
+#filter_text {
+  border: none;
+}
+.box-filter {
+  width: 40px;
+  height: 40px;
+  background-color: #455396;
+  color: white;
+  margin-top: 10px;
+  border-radius: 5px;
+  /* padding: 10px; */
+  padding-top: 10px;
+  text-align: center;
+}
+#map_controller {
+  display: none;
+}
+#map_control_btn {
+  background-color: #455396;
+  width: 50px;
+  border: none;
+  color: white;
+}
+#map_control_reset {
+  background-color: rgb(221, 60, 60);
+  width: 50px;
+  border: none;
+  color: white;
+}
+#map_control_reset:hover {
+  background-color: rgb(194, 52, 52);
+  border: none;
+  color: white;
+}
+#map_control_btn:hover {
+  background-color: #364179;
+  border: none;
+  color: white;
+}
+.tooltipme {
+  position: relative;
+  display: inline-block;
+}
+.tooltipme div {
+  white-space: nowrap;
+  width: 30px;
+  font-size: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tooltipme .tooltiptextme {
+  visibility: hidden;
+  width: 120px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltipme .tooltiptextme::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.tooltipme:hover .tooltiptextme {
+  visibility: visible;
+  opacity: 1;
+}
 @media only screen and (max-width: 768px) {
   .score h5 {
     font-size: 20px;
@@ -272,7 +374,7 @@ select:disabled::-ms-expand {
     height: 60px;
     color: #455396;
     margin: auto;
-    width: 100%;
     padding: 10px;
+    width: 100%;
   }
 }

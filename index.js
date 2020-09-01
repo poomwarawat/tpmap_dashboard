@@ -8,7 +8,7 @@ app.get("/", (req, res) => {
   res.sendFile("index.html", { root: path.join(__dirname, "/") });
 });
 
-const PORT = 5000;
+const PORT = 80;
 app.listen(PORT, () => {
   console.log(`Server running on ${PORT}`);
 });

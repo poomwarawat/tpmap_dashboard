@@ -1,5 +1,12 @@
 class TPMAP {
-  constructor(ind, order, state, code_id = null) {
+  constructor(
+    ind,
+    order,
+    state,
+    code_id = null,
+    mapFiler = "คน|นักเรียน|สูงอายุ"
+  ) {
+    // สร้าง lat, lng ประเทศไทย
     this.lat = 13.553576;
     this.lng = 101.683202;
     this.zoom = 6;
@@ -16,6 +23,11 @@ class TPMAP {
     this.code_id = code_id;
     this.centroid = null;
     this.marker = null;
+    this.Y3 = null;
+    this.Y4 = null;
+    this.baseMaps = null;
+    this.defaultMarker = null;
+    this.mapFiler = mapFiler;
   }
   async main() {
     const Country = await new MapData(
@@ -37,7 +49,7 @@ class TPMAP {
       CountryPoor,
       CountryMax,
       CountryMarker,
-    ]).then((value) => {
+    ]).then(async (value) => {
       this.coordinates = value[0];
       this.problem = value[1];
       this.order = value[2];
@@ -45,11 +57,14 @@ class TPMAP {
       this.max = value[4];
       this.marker = value[5];
       this.centroid = null;
-      this.createMap();
-      this.createProblem();
-      this.loadGraph();
-      this.createProvinceSelecter();
-      this.createMaker();
+      // await this.createMap();
+      // await this.createProblem();
+      // await this.loadGraph();
+      // await this.createProvinceSelecter();
+      // await this.createMaker();
+      // await this.createLayerControl();
+      // this.createNewMarker();
+
       if (this.state === "amphur") {
         this.removeSelecter("select_amphur");
         this.createAmphurSelecter();
@@ -69,10 +84,53 @@ class TPMAP {
       }
     });
   }
+  createLayerControl(marker) {
+    if (marker !== undefined) {
+      var Default = L.layerGroup(marker);
+      Default.addTo(this.mymap);
+      var overlayMaps = {
+        Default: Default,
+        eMENSCR_Y3: this.Y3,
+        eMENSCR_Y4: this.Y4,
+      };
+      if (this.mapFiler !== "คน|นักเรียน|สูงอายุ") {
+        const map_controller = document.getElementById("map_controller");
+        map_controller.style.display = "block";
+        console.log(eMenState);
+        if (eMenState === "eMENSCR_Y3") {
+          this.Y3.addTo(this.mymap);
+        } else if (eMenState === "eMENSCR_Y4") {
+          this.Y4.addTo(this.mymap);
+        }
+      } else if (
+        this.mapFiler === "คน|นักเรียน|สูงอายุ" &&
+        filterArray.length > 0
+      ) {
+        const map_controller = document.getElementById("map_controller");
+        map_controller.style.display = "block";
+        console.log(eMenState);
+        if (eMenState === "eMENSCR_Y3") {
+          this.Y3.addTo(this.mymap);
+        } else if (eMenState === "eMENSCR_Y4") {
+          this.Y4.addTo(this.mymap);
+        }
+      }
+      L.control.layers(this.baseMaps, overlayMaps).addTo(this.mymap);
+    }
+  }
+  // createNewMarker() {}
   createProvinceSelecter() {
     try {
       if (this.state === "province") {
         const select_province = document.getElementById("select_province");
+        $(select_province).empty();
+        $(select_province).append(
+          $("<option>", {
+            value: 0,
+            text: "กรุณาเลือกจังหวัด",
+          })
+        );
+
         this.poor.map((data) => {
           let name;
           const option = document.createElement("option");
@@ -88,11 +146,47 @@ class TPMAP {
         });
       }
     } catch (error) {}
+
+    function sortSelect(e) {
+      var oA, i, o;
+      oA = [];
+      for (i = 1; i < e.options.length; i++) {
+        o = e.options[i];
+        oA[i - 1] = new Option(o.text, o.value, o.defaultSelected, o.selected);
+      }
+      oA.sort(function (a, b) {
+        var la = a.text.toLowerCase(),
+          lb = b.text.toLowerCase();
+        if (la > lb) {
+          return 1;
+        }
+        if (la < lb) {
+          return -1;
+        }
+        return 0;
+      });
+      e.options.length = 1;
+      for (i = 0; i < oA.length; i++) {
+        e.options[i + 1] = oA[i];
+        oA[i] = null;
+      }
+      return true;
+    }
+    var eA = $("select#select_province"); //document.getElementsByTagName('select');
+    for (var i = 0; i < eA.length; i++) {
+      sortSelect(eA[i]);
+    }
   }
   createAmphurSelecter() {
     try {
       if (this.state === "amphur") {
         const select_amphur = document.getElementById("select_amphur");
+        $(select_amphur).append(
+          $("<option>", {
+            value: 0,
+            text: "กรุณาเลือกอำเภอ",
+          })
+        );
         this.poor.map((data) => {
           let name;
           const option = document.createElement("option");
@@ -106,11 +200,47 @@ class TPMAP {
         });
       }
     } catch (error) {}
+
+    function sortSelect(e) {
+      var oA, i, o;
+      oA = [];
+      for (i = 1; i < e.options.length; i++) {
+        o = e.options[i];
+        oA[i - 1] = new Option(o.text, o.value, o.defaultSelected, o.selected);
+      }
+      oA.sort(function (a, b) {
+        var la = a.text.toLowerCase(),
+          lb = b.text.toLowerCase();
+        if (la > lb) {
+          return 1;
+        }
+        if (la < lb) {
+          return -1;
+        }
+        return 0;
+      });
+      e.options.length = 1;
+      for (i = 0; i < oA.length; i++) {
+        e.options[i + 1] = oA[i];
+        oA[i] = null;
+      }
+      return true;
+    }
+    var eA = $("select#select_amphur"); //document.getElementsByTagName('select');
+    for (var i = 0; i < eA.length; i++) {
+      sortSelect(eA[i]);
+    }
   }
   createTambolSelecter() {
     try {
       if (this.state === "tambol") {
         const select_tambol = document.getElementById("select_tambol");
+        $(select_tambol).append(
+          $("<option>", {
+            value: 0,
+            text: "กรุณาเลือกตำบล",
+          })
+        );
         this.poor.map((data) => {
           let name;
           const option = document.createElement("option");
@@ -133,6 +263,36 @@ class TPMAP {
         });
       }
     } catch (error) {}
+
+    function sortSelect(e) {
+      var oA, i, o;
+      oA = [];
+      for (i = 1; i < e.options.length; i++) {
+        o = e.options[i];
+        oA[i - 1] = new Option(o.text, o.value, o.defaultSelected, o.selected);
+      }
+      oA.sort(function (a, b) {
+        var la = a.text.toLowerCase(),
+          lb = b.text.toLowerCase();
+        if (la > lb) {
+          return 1;
+        }
+        if (la < lb) {
+          return -1;
+        }
+        return 0;
+      });
+      e.options.length = 1;
+      for (i = 0; i < oA.length; i++) {
+        e.options[i + 1] = oA[i];
+        oA[i] = null;
+      }
+      return true;
+    }
+    var eA = $("select#select_tambol"); //document.getElementsByTagName('select');
+    for (var i = 0; i < eA.length; i++) {
+      sortSelect(eA[i]);
+    }
   }
   removeSelecter(state) {
     try {
@@ -197,14 +357,15 @@ class TPMAP {
         var chart = am4core.create("ordergraph", am4charts.XYChart);
 
         chart.data = graphData;
+        // chart.legend = new am4charts.Legend();
 
         var categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
         categoryAxis.dataFields.category = "year";
-        categoryAxis.numberFormatter.numberFormat = "#";
         categoryAxis.renderer.inversed = true;
         categoryAxis.renderer.grid.template.location = 0;
         categoryAxis.renderer.cellStartLocation = 0.1;
         categoryAxis.renderer.cellEndLocation = 0.9;
+        categoryAxis.numberFormatter.numberFormat = "#,###.##";
 
         var valueAxis = chart.xAxes.push(new am4charts.ValueAxis());
         valueAxis.renderer.opposite = true;
@@ -219,7 +380,7 @@ class TPMAP {
           series.sequencedInterpolation = true;
 
           var valueLabel = series.bullets.push(new am4charts.LabelBullet());
-          valueLabel.label.text = "{valueX}";
+          valueLabel.label.text = "{valueX}"; // ครัวเรือน
           valueLabel.label.horizontalCenter = "left";
           valueLabel.label.dx = 10;
           valueLabel.label.hideOversized = false;
@@ -376,6 +537,7 @@ class TPMAP {
       return COLOR;
     } catch (error) {}
   }
+
   removeLayer() {
     try {
       const layer = this.mymap._layers;
@@ -398,11 +560,48 @@ class TPMAP {
         zoom = 12;
       }
       setTimeout(() => {
-        this.mymap.flyTo([centroid[1], centroid[0]], zoom);
+        this.mymap.flyTo([centroid[1], centroid[0]], zoom, {
+          animate: true,
+          duration: 1.5,
+        });
       }, 300);
     } catch (error) {}
   }
-  loadBaseMap() {
+  fetchNewMarker() {
+    return new Promise((resolve, reject) => {
+      try {
+        fetch(
+          `https://api.logbook.emenscr.in.th/emenscr/getApprovedProjects?Y=3&search=${this.mapFiler}`,
+          {
+            method: "GET",
+            rejectUnauthorized: true,
+          }
+        )
+          .then((res) => res.json())
+          .then((res) => resolve(res.data));
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+  fetchNewMarker2() {
+    return new Promise((resolve, reject) => {
+      try {
+        fetch(
+          `https://api.logbook.emenscr.in.th/emenscr/getApprovedProjects?Y=4&search=${this.mapFiler}`,
+          {
+            method: "GET",
+            rejectUnauthorized: true,
+          }
+        )
+          .then((res) => res.json())
+          .then((res) => resolve(res.data));
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+  async loadBaseMap() {
     try {
       this.mymap = L.map("mapid").setView([this.lat, this.lng], this.zoom);
       L.tileLayer(
@@ -418,24 +617,144 @@ class TPMAP {
             "pk.eyJ1Ijoid2FyYXdhdCIsImEiOiJja2J3ZXdlejQwOHl0MnpuYWJ6OXpsYmNpIn0.r3XzLHziEuUpsPtKXwYjJg",
         }
       ).addTo(this.mymap);
-    } catch (error) {}
+      this.mymap.on("overlayadd", function (e) {
+        if (e.name === "eMENSCR_Y3" || e.name === "eMENSCR_Y4") {
+          const map_controller = document.getElementById("map_controller");
+          eMenState = e.name;
+          map_controller.style.display = "block";
+        }
+      });
+      this.mymap.on("overlayremove", function (e) {
+        if (e.name === "eMENSCR_Y3" || e.name === "eMENSCR_Y4") {
+          const map_controller = document.getElementById("map_controller");
+          map_controller.style.display = "none";
+        }
+      });
+      var Icon = L.icon({
+        iconUrl: "/static/images/01emenscr3.png", // y3
+        iconSize: [17, 25], // size of the icon
+        shadowSize: [20, 30], // size of the shadow
+        iconAnchor: [17, 25], // point of the icon which will correspond to marker's location
+        shadowAnchor: [4, 62], // the same for the shadow
+        popupAnchor: [-3, -40], // point from which the popup should open relative to the iconAnchor
+      });
+
+      var Icon2 = L.icon({
+        iconUrl: "/static/images/01emenscr4.png", // y4
+        iconSize: [17, 25], // size of the icon
+        shadowSize: [20, 30], // size of the shadow
+        iconAnchor: [17, 25], // point of the icon which will correspond to marker's location
+        shadowAnchor: [4, 62], // the same for the shadow
+        popupAnchor: [-3, -40], // point from which the popup should open relative to the iconAnchor
+      });
+      const Marker = await this.fetchNewMarker();
+      const Marker2 = await this.fetchNewMarker2();
+      const MarkerArray = [];
+      const MarkerArray2 = [];
+      for (let index = 0; index < Marker.length; index++) {
+        const point = Marker[index];
+        const { latitude, longitude } = point.area_geo;
+        const name = point.name;
+
+        let marker = new L.marker([latitude, longitude], {
+          icon: Icon,
+        });
+        //.bindPopup(`ชื่อโครงการ : ${name}`);
+        marker.on("mouseover", (e) => {
+          marker.bindPopup(`<b>ชื่อโครงการ : ${name}</b><br>`).openPopup();
+        });
+        marker.on("mouseout", (e) => {
+          marker.closePopup();
+        });
+
+        MarkerArray.push(marker);
+      }
+      for (let index = 0; index < Marker2.length; index++) {
+        const point = Marker2[index];
+        const { latitude, longitude } = point.area_geo;
+        const name = point.name;
+
+        let marker = new L.marker([latitude, longitude], {
+          icon: Icon2,
+        });
+        //.bindPopup(`ชื่อโครงการ : ${name}`);
+        marker.on("mouseover", (e) => {
+          marker.bindPopup(`<b>ชื่อโครงการ : ${name}</b><br>`).openPopup();
+        });
+        marker.on("mouseout", (e) => {
+          marker.closePopup();
+        });
+
+        MarkerArray2.push(marker);
+      }
+      var cities = L.layerGroup(MarkerArray);
+      var cities2 = L.layerGroup(MarkerArray2);
+      var grayscale = L.tileLayer(
+          "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
+          {
+            attribution:
+              'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            id: "mapbox/light-v10",
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken:
+              "pk.eyJ1Ijoid2FyYXdhdCIsImEiOiJja2J3ZXdlejQwOHl0MnpuYWJ6OXpsYmNpIn0.r3XzLHziEuUpsPtKXwYjJg",
+          }
+        ),
+        streets = L.tileLayer(
+          "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
+          {
+            attribution:
+              'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            id: "mapbox/streets-v11",
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken:
+              "pk.eyJ1Ijoid2FyYXdhdCIsImEiOiJja2J3ZXdlejQwOHl0MnpuYWJ6OXpsYmNpIn0.r3XzLHziEuUpsPtKXwYjJg",
+          }
+        );
+
+      var baseMaps = {
+        Grayscale: grayscale,
+        Streets: streets,
+      };
+
+      this.Y3 = cities;
+      this.Y4 = cities2;
+      this.baseMaps = baseMaps;
+
+      // var overlayMaps = {
+      //   eMENSCR_Y3: cities,
+      //   eMENSCR_Y4: cities2,
+      // };
+
+      // L.control.layers(baseMaps, overlayMaps).addTo(this.mymap);
+    } catch (error) {
+      console.log(error);
+    }
   }
   createMaker() {
-    var Icon = L.icon({
-      iconUrl: "./img/marker.png",
-      iconSize: [38, 45], // size of the icon
+    var Icon3 = L.icon({
+      iconUrl: "/static/images/01tpmap.png",
+      iconSize: [38, 38], // size of the icon
       shadowSize: [50, 64], // size of the shadow
       iconAnchor: [22, 45], // point of the icon which will correspond to marker's location
       shadowAnchor: [4, 62], // the same for the shadow
       popupAnchor: [-3, -40], // point from which the popup should open relative to the iconAnchor
     });
     if (this.state === "province") {
-      this.marker.map(async (data) => {
+      let MarkerArray = [];
+      console.log("start");
+      this.marker.map(async (data, index) => {
         const Location = new MapData("amphur", data["_id"]);
         var location = await Location.getCentroid();
         let name = location["properties"]["PV_TN"];
         location = location["geometry"]["coordinates"];
-        var marker = L.marker([location[1], location[0]]).addTo(this.mymap);
+        //{ icon: Icon }
+        var marker = L.marker([location[1], location[0]], {
+          icon: Icon3,
+        });
+        //.addTo(this.mymap);
         marker.on("mouseover", (e) => {
           marker
             .bindPopup(`<b>${name} มีจำนวน ${data["count"]} ครัวเรือน</b><br>`)
@@ -444,11 +763,26 @@ class TPMAP {
         marker.on("mouseout", (e) => {
           marker.closePopup();
         });
+        const icon = marker.options.icon;
+        icon.options.iconSize = [17, 25];
+        icon.options.iconAnchor = [17, 25];
+        icon.options.shadowSize = [20, 30];
+        marker.setIcon(icon);
+        MarkerArray.push(marker);
+        if (index + 1 === this.marker.length) {
+          this.createLayerControl(MarkerArray);
+        }
       });
     } else if (this.state === "amphur") {
-      this.marker.map(async (data) => {
+      let MarkerArray = [];
+      console.log("Hello");
+      var myRenderer = L.canvas({ padding: 0.5 });
+      this.marker.map(async (data, index) => {
         const location = data["geometry"]["coordinates"];
-        var marker = L.marker([location[1], location[0]]).addTo(this.mymap);
+        var marker = L.marker([location[1], location[0]], {
+          renderer: myRenderer,
+          icon: Icon3,
+        }).addTo(this.mymap);
         marker.on("mouseover", (e) => {
           marker
             .bindPopup(
@@ -459,11 +793,23 @@ class TPMAP {
         marker.on("mouseout", (e) => {
           marker.closePopup();
         });
+        const icon = marker.options.icon;
+        icon.options.iconSize = [17, 25];
+        icon.options.iconAnchor = [17, 25];
+        icon.options.shadowSize = [20, 30];
+        marker.setIcon(icon);
+        MarkerArray.push(marker);
+        if (index + 1 === this.marker.length) {
+          this.createLayerControl(MarkerArray);
+        }
       });
     } else if (this.state === "tambol") {
-      this.marker.map(async (data) => {
+      let MarkerArray = [];
+      this.marker.map(async (data, index) => {
         const location = data["geometry"]["coordinates"];
-        var marker = L.marker([location[1], location[0]]).addTo(this.mymap);
+        var marker = L.marker([location[1], location[0]], {
+          icon: Icon3,
+        }).addTo(this.mymap);
         marker.on("mouseover", (e) => {
           marker
             .bindPopup(
@@ -474,11 +820,23 @@ class TPMAP {
         marker.on("mouseout", (e) => {
           marker.closePopup();
         });
+        const icon = marker.options.icon;
+        icon.options.iconSize = [17, 25];
+        icon.options.iconAnchor = [17, 25];
+        icon.options.shadowSize = [20, 30];
+        marker.setIcon(icon);
+        MarkerArray.push(marker);
+        if (index + 1 === this.marker.length) {
+          this.createLayerControl(MarkerArray);
+        }
       });
     } else if (this.state === "village") {
-      this.marker.map(async (data) => {
+      let MarkerArray = [];
+      this.marker.map(async (data, index) => {
         const location = data["geometry"]["coordinates"];
-        var marker = L.marker([location[1], location[0]]).addTo(this.mymap);
+        var marker = L.marker([location[1], location[0]], {
+          icon: Icon3,
+        }).addTo(this.mymap);
         marker.on("mouseover", (e) => {
           marker
             .bindPopup(
@@ -489,6 +847,15 @@ class TPMAP {
         marker.on("mouseout", (e) => {
           marker.closePopup();
         });
+        const icon = marker.options.icon;
+        icon.options.iconSize = [17, 25];
+        icon.options.iconAnchor = [17, 25];
+        icon.options.shadowSize = [20, 30];
+        marker.setIcon(icon);
+        MarkerArray.push(marker);
+        if (index + 1 === this.marker.length) {
+          this.createLayerControl(MarkerArray);
+        }
       });
     }
   }

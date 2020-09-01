@@ -19,12 +19,6 @@
     />
 
     <!-- JS, Popper.js, and jQuery -->
-    <script type="text/javascript" src="./update_panel.json"></script>
-    <script src="./Centroid.js"></script>
-    <script src="./MapData.js"></script>
-    <script src="./TMMAP.js"></script>
-    <script src="./province.js"></script>
-    <script src="./script.js"></script>
     <script
       src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
       integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
@@ -59,6 +53,13 @@
       integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
       crossorigin=""
     ></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/leaflet-pixi-overlay@1/L.PixiOverlay.min.js"></script> -->
+    <script type="text/javascript" src="./update_panel.json"></script>
+    <script src="./Centroid.js"></script>
+    <script src="./MapData.js"></script>
+    <script src="./TMMAP.js"></script>
+    <script src="./province.js"></script>
+    <script src="./script.js"></script>
   </head>
   <body class="main">
     <!-- error -->
@@ -168,9 +169,26 @@
               <h5>Map</h5>
             </div>
             <div id="map_container">
-              <div id="mapid">
-                <div></div>
+              <div id="map_controller" class="map-controller">
+                <div class="input-group">
+                  <input
+                    type="text"
+                    id="filter_text"
+                    class="form-control"
+                    placeholder="เพิ่มคำที่ต้องการค้นหา"
+                    aria-label="Recipient's username"
+                    aria-describedby="button-addon2"
+                  />
+                  <div class="input-group-append">
+                    <button type="button" id="map_control_btn">เพิ่ม</button>
+                  </div>
+                  <div class="input-group-append">
+                    <button type="button" id="map_control_reset">ล้าง</button>
+                  </div>
+                </div>
               </div>
+              <div class="map-controller-right" id="box_filter"></div>
+              <div id="mapid"></div>
             </div>
           </div>
         </div>
@@ -190,124 +208,121 @@
                 <select id="indicater" class="selector">
                   <option value="0">กรุณาเลือก</option>
                   <option value="1">
-                    ตัวชี้วัดที่ 1 เด็กแรกเกิดมีน้ำหนัก 2,500 กรัมขึ้นไป</option
-                  >
+                    ตัวชี้วัดที่ 1 เด็กแรกเกิดมีน้ำหนัก 2,500 กรัมขึ้นไป
+                  </option>
                   <option value="2">
                     ตัวชี้วัดที่ 2 เด็กแรกเกิดได้กินนมแม่อย่างเดียวอย่างน้อย 6
-                    เดือนแรกติดต่อกัน</option
-                  >
+                    เดือนแรกติดต่อกัน
+                  </option>
                   <option value="3">
                     ตัวชี้วัดที่ 3 เด็กแรกเกิดถึง 12 ปี
-                    ได้รับวัคซีนป้องกันโรคครบตามตารางสร้างเสริมภูมิคุ้มกันโรค</option
-                  >
+                    ได้รับวัคซีนป้องกันโรคครบตามตารางสร้างเสริมภูมิคุ้มกันโรค
+                  </option>
                   <option value="4">
                     ตัวชี้วัดที่ 4 ครัวเรือนกินอาหารถูกสุขลักษณะ ปลอดภัย
-                    และได้มาตราฐาน</option
-                  >
+                    และได้มาตราฐาน
+                  </option>
                   <option value="5">
                     ตัวชี้วัดที่ 5 ครัวเรือนมีการใช้ยาเพื่อบำบัด
-                    บรรเทาอาการเจ็บป่วยเบื้องต้นอย่างเหมาะสม</option
-                  >
+                    บรรเทาอาการเจ็บป่วยเบื้องต้นอย่างเหมาะสม
+                  </option>
                   <option value="6">
-                    ตัวชี้วัดที่ 6 คนอายุ 35 ปีขึ้นไป
-                    ได้รับการตรวจสุขภาพประจำปี</option
-                  >
+                    ตัวชี้วัดที่ 6 คนอายุ 35 ปีขึ้นไป ได้รับการตรวจสุขภาพประจำปี
+                  </option>
                   <option value="7">
                     ตัวชี้วัดที่ 7 คนอายุ 6 ปีขึ้นไป
-                    ออกกำลังกายอย่างน้อยสัปดาห์ละ 3 วันๆละ 30 นาที</option
-                  >
+                    ออกกำลังกายอย่างน้อยสัปดาห์ละ 3 วันๆละ 30 นาที
+                  </option>
                   <option value="8">
                     ตัวชี้วัดที่ 8 ครัวเรือนมีความมั่นคงในที่อยู่อาศัย
-                    และบ้านมีสภาพคงทนถาวร</option
-                  >
+                    และบ้านมีสภาพคงทนถาวร
+                  </option>
                   <option value="9">
                     ตัวชี้วัดที่ 9
                     ครัวเรือนมีน้ำสะอาดสำหรับดื่มและบริโภคเพียงพอตลอดปี
-                    อย่างน้อยคนละ 5 ลิตรต่อวัน</option
-                  >
+                    อย่างน้อยคนละ 5 ลิตรต่อวัน
+                  </option>
                   <option value="10">
                     ตัวชี้วัดที่ 10 ครัวเรือนมีน้ำใช้เพียงพอตลอดปี อย่างน้อยคนละ
-                    45 ลิตรต่อวัน</option
-                  >
+                    45 ลิตรต่อวัน
+                  </option>
                   <option value="11">
                     ตัวชี้วัดที่ 11
                     ครัวเรือนมีการจัดการบ้านเรือนเป็นระเบียบเรียบร้อย สะอาด
-                    และถูกสุขลักษณะ</option
-                  >
+                    และถูกสุขลักษณะ
+                  </option>
                   <option value="12">
-                    ตัวชี้วัดที่ 12 ครัวเรือนไม่ถูกรบกวนจากมลพิษ</option
-                  >
+                    ตัวชี้วัดที่ 12 ครัวเรือนไม่ถูกรบกวนจากมลพิษ
+                  </option>
                   <option value="13">
                     ตัวชี้วัดที่ 13
-                    ครัวเรือนมีการป้องกันอุบัติภัยและภัยธรรมชาติอย่างถูกวิธี</option
-                  >
+                    ครัวเรือนมีการป้องกันอุบัติภัยและภัยธรรมชาติอย่างถูกวิธี
+                  </option>
                   <option value="14">
-                    ตัวชี้วัดที่ 14
-                    ครัวเรือนมีความปลอดภัยในชีวิตและทรัพย์สิน</option
-                  >
+                    ตัวชี้วัดที่ 14 ครัวเรือนมีความปลอดภัยในชีวิตและทรัพย์สิน
+                  </option>
                   <option value="15">
                     ตัวชี้วัดที่ 15 เด็กอายุ 3-5 ปี
-                    ได้รับบริการเลี้ยงดูเตรียมความพร้อมก่อนวัยเรียน</option
-                  >
+                    ได้รับบริการเลี้ยงดูเตรียมความพร้อมก่อนวัยเรียน
+                  </option>
                   <option value="16">
                     ตัวชี้วัดที่ 16 เด็กอายุ 6-14 ปี ได้รับการศึกษาภาคบังคับ 9
-                    ปี</option
-                  >
+                    ปี
+                  </option>
                   <option value="17">
                     ตัวชี้วัดที่ 17 เด็กจบชั้น ม.3 ได้เรียนต่อชั้น ม.4
-                    หรือเทียบเท่า</option
-                  >
+                    หรือเทียบเท่า
+                  </option>
                   <option value="18">
                     ตัวชี้วัดที่ 18 คนในครัวเรือนที่จบการศึกษาภาคบังคับ 9 ปี
-                    ที่ไม่ได้เรียนต่อและยังไม่มีงานทำ
-                    ได้รับการฝึกอบรมด้านอาชีพ</option
-                  >
+                    ที่ไม่ได้เรียนต่อและยังไม่มีงานทำ ได้รับการฝึกอบรมด้านอาชีพ
+                  </option>
                   <option value="19">
                     ตัวชี้วัดที่ 19 คนอายุ 15-59 ปี อ่าน เขียนภาษาไทย
-                    และคิดเลขอย่างง่ายได้</option
-                  >
+                    และคิดเลขอย่างง่ายได้
+                  </option>
                   <option value="20">
-                    ตัวชี้วัดที่ 20 คนอายุ 15-59 ปี มีอาชีพและรายได้</option
-                  >
+                    ตัวชี้วัดที่ 20 คนอายุ 15-59 ปี มีอาชีพและรายได้
+                  </option>
                   <option value="21">
-                    ตัวชี้วัดที่ 21 คนอายุ 60 ปีขึ้นไป มีอาชีพและรายได้</option
-                  >
+                    ตัวชี้วัดที่ 21 คนอายุ 60 ปีขึ้นไป มีอาชีพและรายได้
+                  </option>
                   <option value="22">
-                    ตัวชี้วัดที่ 22 รายได้เฉลี่ยของคนในครัวเรือนต่อปี</option
-                  >
+                    ตัวชี้วัดที่ 22 รายได้เฉลี่ยของคนในครัวเรือนต่อปี
+                  </option>
                   <option value="23">
-                    ตัวชี้วัดที่ 23 ครัวเรือนมีการเก็บออมเงิน</option
-                  >
+                    ตัวชี้วัดที่ 23 ครัวเรือนมีการเก็บออมเงิน
+                  </option>
                   <option value="24">
-                    ตัวชี้วัดที่ 24 คนในครัวเรือนไม่ดื่มสุรา</option
-                  >
+                    ตัวชี้วัดที่ 24 คนในครัวเรือนไม่ดื่มสุรา
+                  </option>
                   <option value="25">
-                    ตัวชี้วัดที่ 25 คนในครัวเรือนไม่สูบบุหรี่</option
-                  >
+                    ตัวชี้วัดที่ 25 คนในครัวเรือนไม่สูบบุหรี่
+                  </option>
                   <option value="26">
                     ตัวชี้วัดที่ 26 คนอายุ 6 ปีขึ้นไป
-                    ปฏิบัติกิจกรรมทางศาสนาอย่างน้อยสัปดาห์ละ 1 ครั้ง</option
-                  >
+                    ปฏิบัติกิจกรรมทางศาสนาอย่างน้อยสัปดาห์ละ 1 ครั้ง
+                  </option>
                   <option value="27">
                     ตัวชี้วัดที่ 27 ผู้สูงอายุ ได้รับการดูแลจากครอบครัว ชุมชน
-                    ภาครัฐ หรือภาคเอกชน</option
-                  >
+                    ภาครัฐ หรือภาคเอกชน
+                  </option>
                   <option value="28">
                     ตัวชี้วัดที่ 28 ผู้พิการ ได้รับการดูแลจากครอบครัว ชุมชน
-                    ภาครัฐ หรือภาคเอกชน</option
-                  >
+                    ภาครัฐ หรือภาคเอกชน
+                  </option>
                   <option value="29">
                     ตัวชี้วัดที่ 29 ผู้ป่วยเรื้อรัง ได้รับการดูแลจากครอบครัว
-                    ชุมชน ภาครัฐ หรือภาคเอกชน</option
-                  >
+                    ชุมชน ภาครัฐ หรือภาคเอกชน
+                  </option>
                   <option value="30">
                     ตัวชี้วัดที่ 30
                     ครัวเรือนมีส่วนร่วมทำกิจกรรมสาธารณะเพื่อประโยชน์ของชุมชน
-                    หรือท้องถิ่น</option
-                  >
+                    หรือท้องถิ่น
+                  </option>
                   <option value="31">
-                    ตัวชี้วัดที่ 31 ครอบครัวมีความอบอุ่น</option
-                  >
+                    ตัวชี้วัดที่ 31 ครอบครัวมีความอบอุ่น
+                  </option>
                 </select>
               </div>
             </div>
@@ -381,9 +396,7 @@
   <div class="footer">
     <img class="footer-img" src="./img/TPMAP logo sponsor.png" />
     <div class="main-footer">
-      <p>
-        2018 เนคเทค-สวทช.
-      </p>
+      <p>2018 เนคเทค-สวทช.</p>
     </div>
   </div>
   <script src="./script.js"></script>

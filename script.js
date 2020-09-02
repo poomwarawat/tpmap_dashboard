@@ -49,6 +49,8 @@ let filterArray = [];
 async function handleResetFilterMap() {
   filterArray = [];
   let select_amphur = document.getElementById("box_filter");
+  const header_map = document.getElementById("header_map");
+  header_map.style.height = "50px";
   select_amphur.innerHTML = "";
   select_amphur.className = "";
   const loader = document.getElementById("loader");
@@ -71,6 +73,8 @@ async function handleResetFilterMap() {
 }
 async function handleMapSelect() {
   let value = document.getElementById("filter_text").value;
+  const header_map = document.getElementById("header_map");
+  header_map.style.height = "100px";
   value = value.split(" ");
   if (value.length > 0) {
     for (let index = 0; index < value.length; index++) {

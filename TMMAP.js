@@ -651,16 +651,21 @@ class TPMAP {
       this.mymap.on("overlayadd", function (e) {
         if (e.name === "eMENSCR_Y3" || e.name === "eMENSCR_Y4") {
           const map_controller = document.getElementById("map_controller");
+          // const header_map = document.getElementById("header_map");
           eMenState = e.name;
           map_controller.style.display = "block";
           if (e.name === "eMENSCR_Y3") {
             filterState1 = true;
+            // header_map.style.height = "100px";
           } else if (e.name === "eMENSCR_Y4") {
             filterState2 = true;
+            // header_map.style.height = "100px";
           }
         }
       });
       this.mymap.on("overlayremove", function (e) {
+        const header_map = document.getElementById("header_map");
+        const box_filter = document.getElementById("box_filter");
         if (e.name === "eMENSCR_Y3") {
           filterState1 = false;
         } else if (e.name === "eMENSCR_Y4") {
@@ -670,6 +675,8 @@ class TPMAP {
           const map_controller = document.getElementById("map_controller");
           eMenState = e.name;
           map_controller.style.display = "none";
+          header_map.style.height = "50px";
+          box_filter.style.display = "none";
         }
       });
       var Icon = L.icon({

@@ -117,7 +117,7 @@ class TPMAP {
       }
       const layerG = L.control.layers(this.baseMaps, overlayMaps);
       let test = layerG.options;
-      test.collapsed = false;
+      // test.collapsed = false;
       layerG.addTo(this.mymap);
     }
   }
@@ -791,59 +791,69 @@ class TPMAP {
         }
       });
     } else if (this.state === "amphur") {
-      let MarkerArray = [];
-      this.marker.map(async (data, index) => {
-        const location = data["geometry"]["coordinates"];
-        var marker = L.marker([location[1], location[0]], {
-          icon: Icon3,
-        }).addTo(this.mymap);
-        marker.on("mouseover", (e) => {
-          marker
-            .bindPopup(
-              `<b>House ID : ${data["properties"]["house_ID"]}</b><br>`
-            )
-            .openPopup();
+      try {
+        let MarkerArray = [];
+        this.marker.map(async (data, index) => {
+          const location = data["geometry"]["coordinates"];
+          var marker = L.marker([location[1], location[0]], {
+            icon: Icon3,
+          }).addTo(this.mymap);
+          marker.on("mouseover", (e) => {
+            marker
+              .bindPopup(
+                `<b>House ID : ${data["properties"]["house_ID"]}</b><br>`
+              )
+              .openPopup();
+          });
+          marker.on("mouseout", (e) => {
+            marker.closePopup();
+          });
+          const icon = marker.options.icon;
+          icon.options.iconSize = [17, 25];
+          icon.options.iconAnchor = [17, 25];
+          icon.options.shadowSize = [20, 30];
+          marker.setIcon(icon);
+          MarkerArray.push(marker);
+          if (index + 1 === this.marker.length) {
+            this.createLayerControl(MarkerArray);
+          }
         });
-        marker.on("mouseout", (e) => {
-          marker.closePopup();
-        });
-        const icon = marker.options.icon;
-        icon.options.iconSize = [17, 25];
-        icon.options.iconAnchor = [17, 25];
-        icon.options.shadowSize = [20, 30];
-        marker.setIcon(icon);
-        MarkerArray.push(marker);
-        if (index + 1 === this.marker.length) {
-          this.createLayerControl(MarkerArray);
-        }
-      });
+      } catch (error) {
+        console.log("ไม่พบหมุดในพื้นที่นี้");
+      }
     } else if (this.state === "tambol") {
-      let MarkerArray = [];
-      this.marker.map(async (data, index) => {
-        const location = data["geometry"]["coordinates"];
-        var marker = L.marker([location[1], location[0]], {
-          icon: Icon3,
-        }).addTo(this.mymap);
-        marker.on("mouseover", (e) => {
-          marker
-            .bindPopup(
-              `<b>House ID : ${data["properties"]["house_ID"]}</b><br>`
-            )
-            .openPopup();
+      try {
+        let MarkerArray = [];
+        this.marker.map(async (data, index) => {
+          if (!data["errmsg"]) {
+            const location = data["geometry"]["coordinates"];
+            var marker = L.marker([location[1], location[0]], {
+              icon: Icon3,
+            }).addTo(this.mymap);
+            marker.on("mouseover", (e) => {
+              marker
+                .bindPopup(
+                  `<b>House ID : ${data["properties"]["house_ID"]}</b><br>`
+                )
+                .openPopup();
+            });
+            marker.on("mouseout", (e) => {
+              marker.closePopup();
+            });
+            const icon = marker.options.icon;
+            icon.options.iconSize = [17, 25];
+            icon.options.iconAnchor = [17, 25];
+            icon.options.shadowSize = [20, 30];
+            marker.setIcon(icon);
+            MarkerArray.push(marker);
+            if (index + 1 === this.marker.length) {
+              this.createLayerControl(MarkerArray);
+            }
+          }
         });
-        marker.on("mouseout", (e) => {
-          marker.closePopup();
-        });
-        const icon = marker.options.icon;
-        icon.options.iconSize = [17, 25];
-        icon.options.iconAnchor = [17, 25];
-        icon.options.shadowSize = [20, 30];
-        marker.setIcon(icon);
-        MarkerArray.push(marker);
-        if (index + 1 === this.marker.length) {
-          this.createLayerControl(MarkerArray);
-        }
-      });
+      } catch (error) {
+        console.log("ไม่พบหมุดในพื้นที่นี้");
+      }
     } else if (this.state === "village") {
       let MarkerArray = [];
       this.marker.map(async (data, index) => {

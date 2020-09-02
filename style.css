@@ -238,14 +238,14 @@ select:disabled::-ms-expand {
   top: 10px;
 }
 .map-controller-right {
-  width: 40px;
-  height: 300px;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  width: 250px;
+  height: 40px;
+  overflow-x: scroll;
   z-index: 4;
   position: absolute;
-  right: 28px;
-  top: 105px;
+  left: 80px;
+  top: 10px;
+  color: white;
 }
 #filter_text {
   border: none;

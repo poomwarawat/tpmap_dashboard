@@ -76,21 +76,15 @@ async function handleMapSelect() {
   const value = document.getElementById("filter_text").value;
   const right = document.getElementById("box_filter");
   filterArray.push(value);
-  if (filterArray.length > 0) {
-    const div = document.createElement("div");
-    div.className = "box-filter";
-    div.innerHTML = `<div class="tooltipme">    
-    <div>${value}</div>
-    <span class="tooltiptextme">${value}</span>
-  </div>`;
-    right.appendChild(div);
-  }
+  // right.innerHTML = value;
   const loader = document.getElementById("loader");
   const remove = await removeDivMap();
   loader.style.display = "block";
   let text = "";
   for (let index = 0; index < filterArray.length; index++) {
-    text = text + filterArray[index] + "|";
+    text = text + filterArray[index] + " | ";
+    let showText = "Marker filter : " + text;
+    right.innerHTML = showText;
     // console.log(text, filterArray.length, index);
     if (filterArray.length === parseInt(index) + 1) {
       const Map = new TPMAP(0, orderState, countryState, valueState, value);

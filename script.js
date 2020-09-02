@@ -73,8 +73,10 @@ async function handleResetFilterMap() {
 }
 async function handleMapSelect() {
   let value = document.getElementById("filter_text").value;
-  const header_map = document.getElementById("header_map");
-  header_map.style.height = "100px";
+  if (window.screen.width < 600) {
+    const header_map = document.getElementById("header_map");
+    header_map.style.height = "100px";
+  }
   value = value.split(" ");
   if (value.length > 0) {
     for (let index = 0; index < value.length; index++) {

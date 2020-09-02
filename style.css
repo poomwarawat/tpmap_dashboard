@@ -230,7 +230,7 @@ select:disabled::-ms-expand {
   width: 100%;
 }
 .map-controller {
-  width: 200px;
+  width: 220px;
   height: 40px;
   z-index: 4;
   position: absolute;
@@ -238,21 +238,30 @@ select:disabled::-ms-expand {
   top: 10px;
 }
 .map-controller-right {
-  width: 250px;
-  height: 40px;
+  width: 220px;
+  height: 30px;
   overflow-x: scroll;
   z-index: 4;
   position: absolute;
   left: 80px;
   top: 10px;
   color: white;
+  border: 1px solid white;
+  border-radius: 10px 10px 10px 10px;
+  padding: 5px 10px 5px 10px;
+}
+.map-controller-right div {
+  /* background-color: red; */
+  width: 500px;
 }
 #filter_text {
-  border: none;
-  background-color: #455396;
+  margin-right: 5px;
+  border: 1px solid #d6d7f4;
+  background-color: white;
   width: 100px;
-  height: 40px;
-  color: white;
+  height: 30px;
+  color: gray;
+  border-radius: 10px 10px 10px 10px;
 }
 ::placeholder {
   color: white;
@@ -261,14 +270,6 @@ select:disabled::-ms-expand {
 /* ::-webkit-input-placeholder {
   color: white;
 } */
-.input-line {
-  width: 100px;
-  height: 2px;
-  background-color: white;
-  position: absolute;
-  bottom: 5px;
-  left: 0;
-}
 .box-filter {
   width: 40px;
   height: 40px;
@@ -284,10 +285,13 @@ select:disabled::-ms-expand {
   display: none;
 }
 #map_control_btn {
-  background-color: #455396;
+  background-color: #7b7ed0;
   width: 50px;
   border: none;
   color: white;
+  border-radius: 10px 10px 10px 10px;
+  height: 30px;
+  margin-right: 5px;
 }
 .map-error-msg {
   display: none;
@@ -305,18 +309,20 @@ select:disabled::-ms-expand {
   z-index: 3;
 }
 #map_control_reset {
-  background-color: rgb(221, 60, 60);
+  border-radius: 10px 10px 10px 10px;
+  background-color: #d1646d;
   width: 50px;
   border: none;
   color: white;
+  height: 30px;
 }
 #map_control_reset:hover {
-  background-color: rgb(194, 52, 52);
+  background-color: #d1646d;
   border: none;
   color: white;
 }
 #map_control_btn:hover {
-  background-color: #364179;
+  background-color: #7b7ed0;
   border: none;
   color: white;
 }

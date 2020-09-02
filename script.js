@@ -50,6 +50,7 @@ async function handleResetFilterMap() {
   filterArray = [];
   let select_amphur = document.getElementById("box_filter");
   select_amphur.innerHTML = "";
+  select_amphur.className = "";
   const loader = document.getElementById("loader");
   const remove = await removeDivMap();
   const Map = new TPMAP(0, -1, "province");
@@ -86,11 +87,12 @@ async function handleMapSelect() {
   for (let index = 0; index < filterArray.length; index++) {
     if (filterArray.length === parseInt(index) + 1) {
       text = text + filterArray[index];
-      let showText = "Marker filter : " + text;
-      right.innerHTML = showText;
+      let showText = "คำสำคัญ : " + text;
+      right.innerHTML = `<div>${showText}</div>`;
       const Map = new TPMAP(0, orderState, countryState, valueState, text);
       const map_controller = document.getElementById("map_controller");
       const box_filter = document.getElementById("box_filter");
+      box_filter.className = "map-controller-right";
       box_filter.style.display = "none";
       map_controller.style.display = "none";
       await Map.main();
@@ -103,8 +105,8 @@ async function handleMapSelect() {
       box_filter.style.display = "block";
     } else {
       text = text + filterArray[index] + "|";
-      let showText = "Marker filter : " + text;
-      right.innerHTML = showText;
+      let showText = "คำสำคัญ : " + text;
+      right.innerHTML = `<div>${showText}</div>`;
     }
   }
 }

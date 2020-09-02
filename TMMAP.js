@@ -57,6 +57,7 @@ class TPMAP {
       this.max = value[4];
       this.marker = value[5];
       this.centroid = null;
+      this.createLegend();
       // await this.createMap();
       // await this.createProblem();
       // await this.loadGraph();
@@ -83,6 +84,30 @@ class TPMAP {
         this.flyMap();
       }
     });
+  }
+
+  createLegend() {
+    const max = this.max["poor"]["JPT"]["MOFval"]["CNT"];
+    let range0 = 0;
+    let range20 = Math.floor((max * 20) / 100);
+    let range40 = Math.floor((max * 40) / 100);
+    let range60 = Math.floor((max * 60) / 100);
+    let range80 = Math.floor((max * 80) / 100);
+    console.log(range0, range20, range40, range60, range80);
+    /*Legend specific*/
+    var legend = L.control({ position: "bottomright" });
+
+    legend.onAdd = function (map) {
+      var div = L.DomUtil.create("div", "legend");
+      div.innerHTML += `<i style="background: #BD0026"></i><span>${range80} - ${max} คน</span><br>`;
+      div.innerHTML += `<i style="background: #FC4E2A"></i><span>${range60} - ${range80} คน</span><br>`;
+      div.innerHTML += `<i style="background: #FD8D3C"></i><span>${range40} - ${range60} คน</span><br>`;
+      div.innerHTML += `<i style="background: #FEB24C"></i><span>${range20} - ${range40} คน</span><br>`;
+      div.innerHTML += `<i style="background: #FED976"></i><span>${range0} - ${range20} คน</span><br>`;
+      return div;
+    };
+
+    legend.addTo(this.mymap);
   }
   createLayerControl(marker) {
     if (marker !== undefined) {

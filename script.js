@@ -49,11 +49,7 @@ let filterArray = [];
 async function handleResetFilterMap() {
   filterArray = [];
   let select_amphur = document.getElementById("box_filter");
-  let child = select_amphur.lastElementChild;
-  while (child) {
-    select_amphur.removeChild(child);
-    child = select_amphur.lastElementChild;
-  }
+  select_amphur.innerHTML = "";
   const loader = document.getElementById("loader");
   const remove = await removeDivMap();
   const Map = new TPMAP(0, -1, "province");
@@ -73,21 +69,26 @@ async function handleResetFilterMap() {
   await Map.createLayerControl();
 }
 async function handleMapSelect() {
-  const value = document.getElementById("filter_text").value;
+  let value = document.getElementById("filter_text").value;
+  value = value.split(" ");
+  if (value.length > 0) {
+    for (let index = 0; index < value.length; index++) {
+      const splittext = value[index];
+      filterArray.push(splittext);
+    }
+  }
   const right = document.getElementById("box_filter");
-  filterArray.push(value);
-  // right.innerHTML = value;
+
   const loader = document.getElementById("loader");
   const remove = await removeDivMap();
   loader.style.display = "block";
   let text = "";
   for (let index = 0; index < filterArray.length; index++) {
-    text = text + filterArray[index] + " | ";
-    let showText = "Marker filter : " + text;
-    right.innerHTML = showText;
-    // console.log(text, filterArray.length, index);
     if (filterArray.length === parseInt(index) + 1) {
-      const Map = new TPMAP(0, orderState, countryState, valueState, value);
+      text = text + filterArray[index];
+      let showText = "Marker filter : " + text;
+      right.innerHTML = showText;
+      const Map = new TPMAP(0, orderState, countryState, valueState, text);
       const map_controller = document.getElementById("map_controller");
       const box_filter = document.getElementById("box_filter");
       box_filter.style.display = "none";
@@ -100,6 +101,10 @@ async function handleMapSelect() {
       await Map.createProvinceSelecter();
       await Map.createMaker();
       box_filter.style.display = "block";
+    } else {
+      text = text + filterArray[index] + "|";
+      let showText = "Marker filter : " + text;
+      right.innerHTML = showText;
     }
   }
 }

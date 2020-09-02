@@ -93,7 +93,6 @@ class TPMAP {
     let range40 = Math.floor((max * 40) / 100);
     let range60 = Math.floor((max * 60) / 100);
     let range80 = Math.floor((max * 80) / 100);
-    console.log(range0, range20, range40, range60, range80);
     /*Legend specific*/
     var legend = L.control({ position: "bottomright" });
 

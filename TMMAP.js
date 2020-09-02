@@ -87,7 +87,10 @@ class TPMAP {
   }
 
   createLegend() {
-    const max = this.max["poor"]["JPT"]["MOFval"]["CNT"];
+    const max =
+      this.ind === 0
+        ? this.max["poor"]["JPT"]["MOFval"]["CNT"]
+        : this.max["poor"]["JPT"]["MOFval"][`ind${this.ind}`]["CNT"];
     let range0 = 0;
     let range20 = Math.floor((max * 20) / 100);
     let range40 = Math.floor((max * 40) / 100);
@@ -120,7 +123,6 @@ class TPMAP {
       if (this.mapFiler !== "คน|นักเรียน|สูงอายุ") {
         const map_controller = document.getElementById("map_controller");
         map_controller.style.display = "block";
-        // console.log(eMenState);
         if (eMenState === "eMENSCR_Y3") {
           this.Y3.addTo(this.mymap);
         } else if (eMenState === "eMENSCR_Y4") {
@@ -132,7 +134,6 @@ class TPMAP {
       ) {
         const map_controller = document.getElementById("map_controller");
         map_controller.style.display = "block";
-        // console.log(eMenState);
         if (eMenState === "eMENSCR_Y3") {
           this.Y3.addTo(this.mymap);
         } else if (eMenState === "eMENSCR_Y4") {
@@ -297,7 +298,6 @@ class TPMAP {
                 name = name["tumbol_name"];
                 option.innerHTML = name;
                 option.value = fullCode;
-                console.log(fullCode);
                 select_tambol.appendChild(option);
               });
           }

@@ -454,6 +454,8 @@ class countryTable {
               col4.innerHTML = nfObject.format(parseFloat(data62).toFixed(2));
               // .toString()
               // .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+              //add red color to max score in row 10/9/63
               if (data60 > data61 && data60 > data62) {
                 col2.style.color = "red";
               } else if (data61 > data60 && data61 > data62) {

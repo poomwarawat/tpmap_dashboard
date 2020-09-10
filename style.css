@@ -192,6 +192,7 @@ select:disabled::-ms-expand {
 .new-text {
   text-decoration: underline;
   color: #333333;
+  /* font-size: 14px; */
 }
 
 .line {

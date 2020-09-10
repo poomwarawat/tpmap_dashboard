@@ -285,9 +285,6 @@ class TPMAP {
           } else {
             const fullCode = data["tambol_ID"];
             name = data["tambol_ID"];
-            // option.innerHTML = name;
-            // option.value = data["tambol_ID"];
-            // select_tambol.appendChild(option);
             const fetchCode = `${name[0]}${name[1]}${name[2]}${name[3]}`;
             fetch(
               `https://api2.logbook.emenscr.in.th/reference/adms?amp=${fetchCode}`

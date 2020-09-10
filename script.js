@@ -454,6 +454,13 @@ class countryTable {
               col4.innerHTML = nfObject.format(parseFloat(data62).toFixed(2));
               // .toString()
               // .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+              if (data60 > data61 && data60 > data62) {
+                col2.style.color = "red";
+              } else if (data61 > data60 && data61 > data62) {
+                col3.style.color = "red";
+              } else if (data62 > data60 && data62 > data61) {
+                col4.style.color = "red";
+              }
               col5.appendChild(hr);
               row.appendChild(col1);
               row.appendChild(col2);

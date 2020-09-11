@@ -456,11 +456,27 @@ class countryTable {
               // .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
               //add red color to max score in row 10/9/63
-              if (data60 > data61 && data60 > data62) {
+              console.log(
+                parseFloat(data60),
+                parseFloat(data61),
+                parseFloat(data62)
+              );
+              if (
+                parseFloat(data60) > parseFloat(data61) &&
+                parseFloat(data60) > parseFloat(data62)
+              ) {
                 col2.style.color = "red";
-              } else if (data61 > data60 && data61 > data62) {
+              }
+              if (
+                parseFloat(data61) > parseFloat(data60) &&
+                parseFloat(data61) > parseFloat(data62)
+              ) {
                 col3.style.color = "red";
-              } else if (data62 > data60 && data62 > data61) {
+              }
+              if (
+                parseFloat(data62) > parseFloat(data60) &&
+                parseFloat(data62) > parseFloat(data61)
+              ) {
                 col4.style.color = "red";
               }
               col5.appendChild(hr);
